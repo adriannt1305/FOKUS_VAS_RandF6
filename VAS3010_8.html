@@ -126,10 +126,18 @@ function startVAS(){
     if(started) return;
 
     started = true;
-    startTime = performance.now();
+
+    recordingStartPerformance = performance.now();
+    startTime = recordingStartPerformance;
+
+    // Reset marker and VAS to 0
+    currentX = 0;
+    currentVAS = 0;
+    marker.style.left = "0px";
 
     events.push({
         time: 0,
+        absoluteTime: recordingStartPerformance,
         event: "Recording Started"
     });
 
