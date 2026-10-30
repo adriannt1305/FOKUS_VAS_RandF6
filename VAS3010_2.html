@@ -128,6 +128,10 @@ function startVAS(){
     started = true;
     startTime = performance.now();
 
+    currentX = 0;
+    currentVAS = 0;
+    marker.style.left = "0px";
+
     events.push({
         time: 0,
         event: "Recording Started"
