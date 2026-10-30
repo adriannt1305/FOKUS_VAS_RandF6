@@ -53,6 +53,11 @@ body{
 #left-label{ left:0; }
 #right-label{ right:0; text-align:right; }
 
+/* Hide mouse cursor everywhere */
+* {
+    cursor: none !important;
+}
+
 </style>
 </head>
 
@@ -97,6 +102,7 @@ const marker = document.getElementById("vas-marker");
 // state
 let started = false;
 let finished = false;
+let mouseTrackingEnabled = false;
 
 let startTime = 0;
 
@@ -126,7 +132,7 @@ events.push({
 
 document.addEventListener("mousemove", (e) => {
 
-    if (!started || finished) return;
+    if (!started || finished || !mouseTrackingEnabled) return;
 
     const rect = container.getBoundingClientRect();
 
@@ -141,6 +147,18 @@ document.addEventListener("mousemove", (e) => {
 });
 
 //==================================================
+// Enable mouse tracking after first movement
+//==================================================
+
+document.addEventListener("mousemove", function enableTracking() {
+
+    if (!started || finished || mouseTrackingEnabled) return;
+
+    mouseTrackingEnabled = true;
+
+}, { passive: true });
+
+//==================================================
 // START
 //==================================================
 
@@ -153,10 +171,13 @@ function startVAS(){
     recordingStartPerformance = performance.now();
     startTime = recordingStartPerformance;
 
-    // Reset marker and VAS to 0
+    // Reset marker and VAS to zero
     currentX = 0;
     currentVAS = 0;
     marker.style.left = "0px";
+
+    // Disable mouse tracking until first movement
+    mouseTrackingEnabled = false;
 
     events.push({
         time: 0,
